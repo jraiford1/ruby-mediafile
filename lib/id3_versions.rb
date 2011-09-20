@@ -1,0 +1,5 @@
+require 'id3_version/v1'
+require 'id3_version/v2'
+require 'id3_version/v22'
+require 'id3_version/v23'
+require 'id3_version/v24'
