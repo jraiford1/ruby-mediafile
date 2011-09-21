@@ -1,9 +1,7 @@
 require 'set'
-require 'id3tag'
-
-module ID3Tag
+require_relative '../id3'
   
-  class ID3v2 < ID3
+  class ID3v2File < ID3File
     attr_reader :header
     
     def initialize(bytes, io)
@@ -59,18 +57,6 @@ module ID3Tag
     end
   end
   
-end
 
-ID3Tag::ID3v2.load_implementations
-
-## quick test
-file = File.open("/home/jon/test.mp3", "rb")
-tags = ID3Tag::ID3v2.gettags(file)
-file.close
-header = tags[0].header
-puts header.identifier
-puts header.version
-puts header.flags
-puts header.size
 
 

@@ -1,16 +1,9 @@
 require 'set'
+require_relative 'mediafile'
 
-module ID3Tag
-  
-  @@implementations = SortedSet.new
-  class ID3
-    
-    # load each id3v2 tag implementation
-    def self.load_implementations
-      Dir.glob(File.dirname(__FILE__) + '/id3v2_*', &method(:require))
-    end
-    def self.implementations
-      @@implementations
+  class ID3File < MediaFile
+    def self.is_implementation?
+      false
     end
     def self.<=> other
       self.version <=> other.version      
@@ -30,7 +23,3 @@ module ID3Tag
       self.new(bytes, io)      
     end
   end
-end
-
-require 'id3tag/id3v1'
-require 'id3tag/id3v2'
