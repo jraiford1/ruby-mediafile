@@ -1,5 +1,4 @@
-require_relative 'mediafile'
-require_relative 'id3'
+require_relative 'id3file'
 require_relative 'id3_versions/v1'
 require_relative 'id3_versions/v2'
 require_relative 'id3_versions/v22'

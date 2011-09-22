@@ -1,0 +1,5 @@
+require_relative 'metadata_containers/ape'
+require_relative 'metadata_containers/id3'
+require_relative 'metadata_containers/xmp'
+require_relative 'metadata_containers/vorbis_comment'
+require_relative 'metadata_containers/cd-text'

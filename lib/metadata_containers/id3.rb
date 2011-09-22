@@ -2,13 +2,20 @@ require 'set'
 require_relative 'mediafile'
 
   class ID3File < MediaFile
+    # MediaFile Class methods
     def self.is_implementation?
       false
     end
-    def self.<=> other
-      self.version <=> other.version      
+    def self.supports?(io)
+      false
     end
+    # ID3File Class methods
+    attr_reader :io, :header
+    
     def self.version
+      raise "Subclass does not implement method"
+    end
+    def self.getheader(io)
       raise "Subclass does not implement method"
     end
     def self.gettags(io)

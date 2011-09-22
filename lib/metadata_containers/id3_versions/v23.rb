@@ -1,27 +1,25 @@
 
-require_relative '../id3'
+require_relative '../id3file'
 
   class ID3v23File < ID3v2File
-    
-    def self.header_regexp
-      Regexp.new('ID3\x03[\x00-\xEF][\x00-\xFF][\x00-\x7F]{4}', nil, 'N')
+    # MediaFile class methods
+    def self.is_implementation?
+      true
     end
+    # ID3 methods
     def self.header_class
       ID3v23Header
-    end
-    def self.header_size
-      10
     end
     def self.version
       2.3
     end
     
-    def self.supports(filename)
-      true
-    end
   end
   
   class ID3v23Header < ID3v2Header
+    def self.regexp
+      Regexp.new('ID3\x03[\x00-\xEF][\x00-\xFF][\x00-\x7F]{4}', nil, 'N')
+    end
     def flags_bitmap
       {
         :unsynchronisation  =>  7,  7 => :unsynchronisation,

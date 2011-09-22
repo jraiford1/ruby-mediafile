@@ -1,16 +1,36 @@
 require 'set'
-require_relative '../id3'
+require_relative '../id3file'
   
   class ID3v2File < ID3File
-    attr_reader :header
-    
-    def initialize(bytes, io)
-      @io = io
-      @header = self.class.header_class.new(bytes)
+    attr_reader :header, :frames
+    # MediaFile class methods
+    def self.is_implementation?
+      false
     end
+    def self.supports?(io)
+      io.seek(0)
+      bytes = io.read(self.header_class.size_in_bytes)
+      !self.header_class.regexp.match(bytes).nil?
+    end
+    # ID3File class methods
+    def self.header_class
+      ID3v2Header
+    end
+    def self.getheader(io)
+      io.seek(0)
+      bytes = io.read(self.header_size)
+      self.class.header_class.new(bytes)
+    end
+    # ID3v2File methods
   end
   
   class ID3v2Header
+    def self.regexp
+      Regexp.new('(?!x)x', nil, 'N')  # this will never match
+    end
+    def self.size_in_bytes
+      10
+    end
     def initialize(raw_bytes)
       @bytes = raw_bytes
     end

@@ -1,5 +1,5 @@
 
-require_relative '../id3'
+require_relative '../id3file'
 
   class ID3v22File < ID3v2File
     
