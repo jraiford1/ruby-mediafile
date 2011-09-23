@@ -1,4 +1,3 @@
-
 Informal standard                                             M. Nilsson
 Document: id3v2-00.txt                                   26th March 1998
 
@@ -1446,6 +1445,7 @@ A.   Appendix A - ID3-Tag Specification V1.1
 
 A.1.   Overview
 
+
    The ID3-Tag is an information field for MPEG Layer 3 audio files.
    Since a standalone MP3 doesn't provide a method of storing other
    information than those directly needed for replay reasons, the
@@ -1647,14 +1647,12 @@ A.4.   Track addition - ID3v1.1
 9.   Author's Address
 
    Martin Nilsson
-   Rydsvägen 246 C. 30
-   S-584 34 Linköping
+   Rydsvï¿½gen 246 C. 30
+   S-584 34 Linkï¿½ping
    Sweden
 
-   Email: nilsson@id3.org
+   Email: nilsson at id3.org
 
    Co-authors:
 
-   Johan Sundström   Email: johan@id3.org
-
-
+   Johan Sundstrï¿½m   Email: johan at id3.org
