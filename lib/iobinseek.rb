@@ -1,5 +1,3 @@
-require 'stringio'
-
 module BinSeek
   def binseek(bytes, seek_table = nil)
     encoded_bytes = bytes.encode("BINARY")
@@ -47,7 +45,3 @@ if defined?(StringIO) == 'constant' && StringIO.class == Class
     include BinSeek
   end
 end
-
-strio = StringIO.new("asdf asdf asdfasd fa flkjhjfijhe flkjsehl kahsdfa sdfaefe asdf djfiel")
-strio.binseek("flkj")
-puts strio.pos
