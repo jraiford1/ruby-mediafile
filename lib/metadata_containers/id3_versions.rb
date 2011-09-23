@@ -1,6 +1,0 @@
-require_relative 'id3file'
-require_relative 'id3_versions/v1'
-require_relative 'id3_versions/v2'
-require_relative 'id3_versions/v22'
-require_relative 'id3_versions/v23'
-require_relative 'id3_versions/v24'
