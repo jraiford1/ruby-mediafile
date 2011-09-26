@@ -18,9 +18,12 @@ require_relative 'id3v2'
     
   end
   
-  class ID3v23Container < ID3v2Container
+  class ID3v23Tag < ID3v2Tag
     
     # Subclasses should always implement these methods
+    def self.header_size
+      10
+    end
     def self.regexp
       /ID3\x03[\x00-\xEF][\x00-\xFF][\x00-\x7F]{4}/n
     end
@@ -39,9 +42,20 @@ require_relative 'id3v2'
         :crc_data_present   => 15, 15 => :crc_data_present,
       }
     end
+    def tag_size_without_header
+      size = @header.getbyte(6)
+      size = (size << 7) + @header.getbyte(7)
+      size = (size << 7) + @header.getbyte(8)
+      size = (size << 7) + @header.getbyte(9)
+    end
     # ------------------------------------------------
+  end
+  
+  class ID3v23Container < ID3v2Container
+    def self.tag_class
+      ID3v23Tag
+    end
     
   end
-  ID3v23Container.register_version
   
   

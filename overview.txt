@@ -1,0 +1,47 @@
+MediaFile
+         @@implementations
+         @metadata_containers
+         @streams
+         self.supports?(file)
+         read_metadata
+         self.new(filename)
+         self.new_prim
+         self.implementations
+         self.inherited(child)
+         metadata_containers
+         streams
+         initialize(*args)
+			
+Mp3File < MediaFile
+         @id3v1
+         @id3v2
+         @ape
+         self.supports?(file)
+         read_metadata
+
+MetadataContainer
+         @file
+         self.open_on(file)
+         self.open_on_prim(file)
+         read_metadata
+         has_metadata?
+
+ID3Container < MetadataContainer
+         @tags
+         @ext_header
+         @frames
+         has_metadata?
+         read_metadata
+         get_next_tag(prev_tag)
+         read_next_header
+
+ID3v2Container < ID3Container
+         @@versions
+         self.open_on(file)
+         self.register_version
+
+ID3v23Container < ID3v2Container
+         self.regexp
+         self.frame_class
+         header_flags_bitmap
+         ext_header_flags_bitmap

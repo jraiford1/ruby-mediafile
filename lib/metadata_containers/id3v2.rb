@@ -1,10 +1,10 @@
-require_relative 'metadata_container'
-require_relative 'id3tag'
+require_relative 'id3_container'
 require 'stringio'
 require 'set'
+require_relative 'iobinseek'
 
   # Implement Frame class first because its referenced in the Container class
-  class ID3v2Frame
+  class ID3v2Frame < ID3Frame
     
     # Subclasses should always implement these methods
     def self.header_size
@@ -22,9 +22,7 @@ require 'set'
     end
   end
   
-  class ID3v2Container < MetadataContainer
-    @@versions = []
-    
+  class ID3v2Tag < ID3Tag
     # Subclasses should always implement these methods
     def self.regexp
       Regexp.new('(?!x)x', nil, 'N')  # this will never match
@@ -40,79 +38,6 @@ require 'set'
     end
     # ------------------------------------------------
     
-    
-    # Create the appropriate object based on the version in header
-    def self.open_on(file)
-      header_bytes = ""
-      child_class = @@versions.detect { |cls|
-        if cls.header_size != header_bytes.size
-          file.seek(0)
-          header_bytes = file.read(cls.header_size)
-        end
-        !cls.regexp.match(header_bytes).nil? }
-      return nil if child_class.nil?
-      
-      child_class.open_on_prim(file)
-    end
-    def has_metadata?
-      !(@tags.nil? or (@tags.size == 0))
-    end
-    
-    def self.register_version
-      @@versions << self
-    end
-    # MetadataContainer methods
-    def read_metadata
-      @tags = []
-      tag = nil
-      begin
-        tag = self.get_next_tag(tag)
-      end until tag.nil?
-    end
-    
-    def seek_next_tag(prev_tag)
-      if prev_tag.nil?
-        seek = 0
-      else
-        return nil if prev_tag.last?
-        seek = prev_tag.seek
-      end
-      @file.seek(seek)
-      
-    end
-    
-    def get_next_tag(prev_tag)
-      tag = ID3Tag.new
-      tag.offset = self.seek_next_header(prev_tag)
-      
-      # First read the header and return if its not present
-      @header = file.read(self.class.header_size)
-      return if self.class.regexp.match(@header).nil?
-      
-      # Now read the rest of the tag
-      @bytes = file.read(self.header_tag_size)
-      @bytes.gsub!(/\xFF\x00/n, "\xFF".force_encoding("BINARY")) if self.flag?(:unsynchronisation)
-      
-      io = StringIO.new(@bytes)
-      
-      # Read the extended header, if present
-      if self.flag?(:extended_header)
-        @ext_header = io.read(4)
-        @ext_header << io.read(self.ext_header_size) 
-      end
-      
-      # Finally, read the frames that make up the tag
-      @frames = []
-      @padding = 0
-      begin
-        if (b = io.getbyte) == 0
-          @padding = @padding.next
-        else
-          io.ungetbyte(b)
-          @frames << self.class.frame_class.new(io)
-        end
-      end until io.eof?
-    end
     
     ## Header Methods
     def self.header_size
@@ -142,12 +67,6 @@ require 'set'
       self.read_ext_header_flags if @ext_header_flags.nil?
       @header_flags.include?(a_symbol) or @ext_header_flags.include?(a_symbol)
     end
-    def header_tag_size
-      size = @header.getbyte(6)
-      size = (size << 7) + @header.getbyte(7)
-      size = (size << 7) + @header.getbyte(8)
-      size = (size << 7) + @header.getbyte(9)
-    end
     
     ## Extended Header Methods
     def ext_header_size
@@ -172,6 +91,30 @@ require 'set'
     end
   end
   
+  class ID3v2Container < ID3Container
+    def self.tag_class
+      ID3v2Tag
+    end
+    
+    def self.open_on(file)
+      if self == ID3v2Container
+        # instance = ID3v24Container.open_on(file) if instance.nil?
+        instance = ID3v23Container.open_on(file) if instance.nil?
+        # instance = ID3v22Container.open_on(file) if instance.nil?  
+        return instance
+      end
+      
+      instance = self.open_on_prim(file)
+      instance.read_tags
+      return nil if instance.tags.size == 0
+      instance
+    end
+    
+  end
+  
+  require_relative "id3v22"
+  require_relative "id3v23"
+  require_relative "id3v24"
   
 
 

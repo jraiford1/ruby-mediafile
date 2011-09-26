@@ -6,7 +6,7 @@ require_relative 'id3v2'
     
   end
   
-  class ID3v24Container < ID3v2Container
+  class ID3v24Tag < ID3v2Tag
     
     # Subclasses should always implement these methods
     def self.regexp
@@ -28,6 +28,9 @@ require_relative 'id3v2'
     # ------------------------------------------------
     
   end
-  ID3v24Container.register_version
+  
+  class ID3v24Container < ID3v2Container
+    
+  end
   
   
