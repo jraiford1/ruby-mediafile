@@ -24,7 +24,7 @@ require_relative 'id3v2'
     def self.header_size
       10
     end
-    def self.regexp
+    def self.header_regexp
       /ID3\x03[\x00-\xEF][\x00-\xFF][\x00-\x7F]{4}/n
     end
     def self.frame_class
@@ -56,6 +56,9 @@ require_relative 'id3v2'
       ID3v23Tag
     end
     
+    def tag_locations
+      [:first, :requires_first]
+    end
   end
   
   

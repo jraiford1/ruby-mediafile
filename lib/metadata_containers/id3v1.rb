@@ -5,21 +5,22 @@ require_relative 'id3_container'
   end
   
   class ID3v1Tag < ID3Tag
+    def self.footer_size
+      128
+    end
     
+    def self.footer_regexp
+      /TAG/n
+    end
   end
   
   class ID3v1Container < ID3Container
     
     def self.tag_class
-      ID3v2Tag
+      ID3v1Tag
     end
     
-    def self.open_on(file)
-      tags = self.read_tags
-      return nil if tags.size == 0
-      
-      container = tags.first.container.open_on_prim(file)
-      container.tags = tags
-      container
+    def tag_locations
+      [:last]
     end
   end

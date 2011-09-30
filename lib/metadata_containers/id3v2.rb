@@ -24,7 +24,7 @@ require_relative 'iobinseek'
   
   class ID3v2Tag < ID3Tag
     # Subclasses should always implement these methods
-    def self.regexp
+    def self.header_regexp
       Regexp.new('(?!x)x', nil, 'N')  # this will never match
     end
     def self.frame_class
@@ -62,11 +62,6 @@ require_relative 'iobinseek'
         end
       end
     end
-    def flag?(a_symbol)
-      self.read_header_flags if @header_flags.nil?
-      self.read_ext_header_flags if @ext_header_flags.nil?
-      @header_flags.include?(a_symbol) or @ext_header_flags.include?(a_symbol)
-    end
     
     ## Extended Header Methods
     def ext_header_size
@@ -103,11 +98,7 @@ require_relative 'iobinseek'
         # instance = ID3v22Container.open_on(file) if instance.nil?  
         return instance
       end
-      
-      instance = self.open_on_prim(file)
-      instance.read_tags
-      return nil if instance.tags.size == 0
-      instance
+      super
     end
     
   end
