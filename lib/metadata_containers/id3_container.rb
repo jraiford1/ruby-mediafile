@@ -1,10 +1,15 @@
   class ID3Frame
-    
+    attr_accessor :identifier, :bytes, :text_values
+    def initialize
+      @text_values = []
+    end
   end
 
 
   class ID3Tag
     attr_accessor :offset, :size, :seek, :header, :ext_header, :frames, :footer
+    attr_reader :header_flags, :ext_header_flags
+    
     def self.footer_size
       self.header_size
     end
@@ -71,7 +76,10 @@
       
       bytesio = StringIO.new(@bytes)
       
-      self.read_extended_header(bytesio)
+      self.read_extended_header(bytesio) if self.flag?(:extended_header)
+      self.read_frames(bytesio)
+    end
+    def read_frames(bytesio)
       
       # Finally, read the frames that make up the tag
       @frames = []
@@ -142,6 +150,7 @@
         end
         return nil if footer.nil?
         tag = self.class.tag_class.new(self, @file, offset, footer)
+        @tags << tag if !tag.nil?
       end
       return nil if @tags.size == 0
       @tags

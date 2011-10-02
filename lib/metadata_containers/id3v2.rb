@@ -93,7 +93,7 @@ require_relative 'iobinseek'
     
     def self.open_on(file)
       if self == ID3v2Container
-        # instance = ID3v24Container.open_on(file) if instance.nil?
+        instance = ID3v24Container.open_on(file) if instance.nil?
         instance = ID3v23Container.open_on(file) if instance.nil?
         # instance = ID3v22Container.open_on(file) if instance.nil?  
         return instance
