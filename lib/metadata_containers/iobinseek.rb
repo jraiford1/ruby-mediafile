@@ -1,4 +1,14 @@
 module BinSeek
+  def read_uint32be
+    num = self.readbyte
+    num = (num << 8) + self.readbyte
+    num = (num << 8) + self.readbyte
+    num = (num << 8) + self.readbyte
+  end
+  def read_uint64be
+    num = self.read_uint32be
+    num = (num << 32) + self.read_uint32be
+  end
   def binseek(bytes, seek_table = nil)
     encoded_bytes = bytes.encode("BINARY")
     encoded_bytes_less_1 = encoded_bytes[0..-2]

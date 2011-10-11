@@ -1,3 +1,5 @@
+require_relative 'iobinseek'
+
   class MetadataContainer
     
       attr_accessor :file

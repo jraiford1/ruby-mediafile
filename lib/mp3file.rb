@@ -5,7 +5,7 @@ class Mp3File < MediaFile
   attr_reader :id3v1, :id3v2, :ape
   
   def self.supports?(file)
-    File.extname(file.path) =~ /.[mM][pP]3/
+    File.extname(file.path).upcase =~ /.MP3/
   end
   def read_metadata
     @id3v1 = ID3v1Container.open_on(file)
