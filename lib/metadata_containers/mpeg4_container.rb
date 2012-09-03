@@ -38,7 +38,6 @@ module MP4
       true
     end
     def create(boxtype, extended_type)
-      @size
       @type = boxtype
       if @size == 1
         @largesize
